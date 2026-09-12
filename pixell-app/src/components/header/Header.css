@@ -1,0 +1,18 @@
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1em;
+    margin-bottom: 1em;
+}
+
+.logo {
+    width: 70px;
+    height: 70px;
+}
+
+h1 {
+    color: #444;
+    margin-bottom: 0.5em;
+}
