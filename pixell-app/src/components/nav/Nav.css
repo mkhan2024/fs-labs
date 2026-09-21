@@ -1,0 +1,13 @@
+nav {
+    display: flex;
+    gap: 1em;
+    margin: 0 0.3em 1em 0.3em;
+}
+
+nav a {
+    color: #444;
+}
+
+nav a.active {
+    font-weight: bold;
+}
