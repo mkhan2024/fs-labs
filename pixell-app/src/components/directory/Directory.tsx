@@ -1,8 +1,5 @@
-import departmentsJson from "../../data/departments.json";
 import type { Department, Employee } from "../../types";
 import "./Directory.css";
-
-const departments = departmentsJson as Department[];
 
 function getEmployeeName(employee: Employee) {
     if (employee.lastName) {
@@ -11,7 +8,7 @@ function getEmployeeName(employee: Employee) {
     return employee.firstName;
 }
 
-function Directory() {
+function Directory({ departments }: { departments: Department[] }) {
     return (
         <main>
             {departments.map((department) => (
