@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Header from "./components/header/Header";
-import Directory from "./components/directory/Directory";
-import Form from "./components/form/Form";
-import Footer from "./components/footer/Footer";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Layout from "./components/layout/Layout";
+import Employees from "./components/employees/Employees";
+import Organization from "./components/organization/Organization";
 import departmentsJson from "./data/departments.json";
 import type { Department, Employee } from "./types";
 
@@ -32,12 +32,21 @@ function App() {
     };
 
     return (
-        <>
-            <Header />
-            <Directory departments={departments} />
-            <Form departments={departments} onAddEmployee={addEmployee} />
-            <Footer />
-        </>
+        <Routes>
+            <Route path="/" element={<Layout />}>
+                <Route index element={<Navigate to="/employees" />} />
+                <Route
+                    path="employees"
+                    element={
+                        <Employees
+                            departments={departments}
+                            onAddEmployee={addEmployee}
+                        />
+                    }
+                />
+                <Route path="organization" element={<Organization />} />
+            </Route>
+        </Routes>
     );
 }
 
