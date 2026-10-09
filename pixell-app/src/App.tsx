@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import Employees from "./components/employees/Employees";
@@ -7,12 +7,8 @@ import employeeService from "./services/employeeService";
 import type { Department } from "./types";
 
 function App() {
-    const [departments, setDepartments] = useState<Department[]>([]);
-
     // ask for the list when the page loads
-    useEffect(() => {
-        setDepartments(employeeService.getDepartments());
-    }, []);
+    const [departments, setDepartments] = useState<Department[]>(() => employeeService.getDepartments());
 
     const refreshEmployees = () => {
         setDepartments(employeeService.getDepartments());
