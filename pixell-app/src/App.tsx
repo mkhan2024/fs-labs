@@ -1,34 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import Employees from "./components/employees/Employees";
 import Organization from "./components/organization/Organization";
-import departmentsJson from "./data/departments.json";
-import type { Department, Employee } from "./types";
-
-// start with the json list
-const startingDepartments = departmentsJson as Department[];
+import employeeService from "./services/employeeService";
+import type { Department } from "./types";
 
 function App() {
-    const [departments, setDepartments] = useState(startingDepartments);
+    const [departments, setDepartments] = useState<Department[]>([]);
 
-    const addEmployee = (firstName: string, lastName: string, departmentName: string) => {
-        const newEmployee: Employee = { firstName: firstName };
-        if (lastName !== "") {
-            newEmployee.lastName = lastName;
-        }
+    // ask for the list when the page loads
+    useEffect(() => {
+        setDepartments(employeeService.getDepartments());
+    }, []);
 
-        setDepartments((oldDepartments) =>
-            oldDepartments.map((department) => {
-                if (department.name === departmentName) {
-                    return {
-                        ...department,
-                        employees: [...department.employees, newEmployee]
-                    };
-                }
-                return department;
-            })
-        );
+    const refreshEmployees = () => {
+        setDepartments(employeeService.getDepartments());
     };
 
     return (
@@ -40,7 +27,7 @@ function App() {
                     element={
                         <Employees
                             departments={departments}
-                            onAddEmployee={addEmployee}
+                            onEmployeeAdded={refreshEmployees}
                         />
                     }
                 />

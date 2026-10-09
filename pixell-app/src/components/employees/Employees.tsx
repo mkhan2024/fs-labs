@@ -4,15 +4,15 @@ import type { Department } from "../../types";
 
 function Employees({
     departments,
-    onAddEmployee
+    onEmployeeAdded
 }: {
     departments: Department[];
-    onAddEmployee: (firstName: string, lastName: string, departmentName: string) => void;
+    onEmployeeAdded: () => void;
 }) {
     return (
         <>
             <Directory departments={departments} />
-            <Form departments={departments} onAddEmployee={onAddEmployee} />
+            <Form departments={departments} onEmployeeAdded={onEmployeeAdded} />
         </>
     );
 }

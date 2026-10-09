@@ -1,36 +1,39 @@
-import { useState } from "react";
 import type { FormEvent } from "react";
 import type { Department } from "../../types";
+import useFormInput from "../../hooks/useFormInput";
+import employeeService from "../../services/employeeService";
 import "./Form.css";
 
 function Form({
     departments,
-    onAddEmployee
+    onEmployeeAdded
 }: {
     departments: Department[];
-    onAddEmployee: (firstName: string, lastName: string, departmentName: string) => void;
+    onEmployeeAdded: () => void;
 }) {
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [departmentName, setDepartmentName] = useState(departments[0].name);
-    const [error, setError] = useState("");
+    const firstNameInput = useFormInput("");
+    const lastNameInput = useFormInput("");
+    const departmentInput = useFormInput("");
 
     const handleSubmit = (event: FormEvent) => {
         event.preventDefault();
 
-        // wipe old error first
-        setError("");
+        const result = employeeService.tryCreateEmployee(
+            firstNameInput.value,
+            lastNameInput.value,
+            departmentInput.value
+        );
 
-        if (firstName.trim().length < 3) {
-            setError("First name must be at least 3 characters.");
-            return;
+        const firstNameOk = firstNameInput.validate(() => result.firstNameMessages);
+        const departmentOk = departmentInput.validate(() => result.departmentMessages);
+        lastNameInput.validate(() => []);
+
+        if (firstNameOk && departmentOk && result.ok) {
+            onEmployeeAdded();
+            firstNameInput.reset();
+            lastNameInput.reset();
+            departmentInput.reset();
         }
-
-        onAddEmployee(firstName.trim(), lastName.trim(), departmentName);
-
-        setFirstName("");
-        setLastName("");
-        setDepartmentName(departments[0].name);
     };
 
     return (
@@ -41,26 +44,33 @@ function Form({
                 First Name
                 <input
                     type="text"
-                    value={firstName}
-                    onChange={(event) => setFirstName(event.target.value)}
+                    value={firstNameInput.value}
+                    onChange={(event) => firstNameInput.setValue(event.target.value)}
                 />
             </label>
+            {firstNameInput.messages.map((message) => (
+                <p className="error" key={message}>{message}</p>
+            ))}
 
             <label>
                 Last Name
                 <input
                     type="text"
-                    value={lastName}
-                    onChange={(event) => setLastName(event.target.value)}
+                    value={lastNameInput.value}
+                    onChange={(event) => lastNameInput.setValue(event.target.value)}
                 />
             </label>
+            {lastNameInput.messages.map((message) => (
+                <p className="error" key={message}>{message}</p>
+            ))}
 
             <label>
                 Department
                 <select
-                    value={departmentName}
-                    onChange={(event) => setDepartmentName(event.target.value)}
+                    value={departmentInput.value}
+                    onChange={(event) => departmentInput.setValue(event.target.value)}
                 >
+                    <option value="">-- Select Department --</option>
                     {departments.map((department) => (
                         <option key={department.name} value={department.name}>
                             {department.name}
@@ -68,8 +78,9 @@ function Form({
                     ))}
                 </select>
             </label>
-
-            {error !== "" && <p className="error">{error}</p>}
+            {departmentInput.messages.map((message) => (
+                <p className="error" key={message}>{message}</p>
+            ))}
 
             <button type="submit">Add Employee</button>
         </form>
