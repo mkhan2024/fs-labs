@@ -1,6 +1,6 @@
 import type { FormEvent } from "react";
 import type { Department } from "../../types";
-import useFormInput from "../../hooks/useFormInput";
+import useForm from "../../hooks/useForm";
 import employeeService from "../../services/employeeService";
 import "./Form.css";
 
@@ -11,44 +11,36 @@ function Form({
     departments: Department[];
     onEmployeeAdded: () => void;
 }) {
-    const firstNameInput = useFormInput("");
-    const lastNameInput = useFormInput("");
-    const departmentInput = useFormInput("");
+    const form = useForm();
 
-    const handleSubmit = (event: FormEvent) => {
-        event.preventDefault();
+    const onSubmit = (event: FormEvent) => {
+        const saved = form.handleSubmit(event, (firstName, lastName, departmentName) => {
+            const result = employeeService.tryCreateEmployee(firstName, lastName, departmentName);
+            return {
+                ok: result.ok,
+                firstNameMessages: result.firstNameMessages,
+                extraMessages: result.departmentMessages
+            };
+        });
 
-        const result = employeeService.tryCreateEmployee(
-            firstNameInput.value,
-            lastNameInput.value,
-            departmentInput.value
-        );
-
-        const firstNameOk = firstNameInput.validate(() => result.firstNameMessages);
-        const departmentOk = departmentInput.validate(() => result.departmentMessages);
-        lastNameInput.validate(() => []);
-
-        if (firstNameOk && departmentOk && result.ok) {
+        if (saved) {
             onEmployeeAdded();
-            firstNameInput.reset();
-            lastNameInput.reset();
-            departmentInput.reset();
         }
     };
 
     return (
-        <form className="add-form" onSubmit={handleSubmit}>
+        <form className="add-form" onSubmit={onSubmit}>
             <h2>Add Employee</h2>
 
             <label>
                 First Name
                 <input
                     type="text"
-                    value={firstNameInput.value}
-                    onChange={(event) => firstNameInput.setValue(event.target.value)}
+                    value={form.firstName.value}
+                    onChange={(event) => form.firstName.setValue(event.target.value)}
                 />
             </label>
-            {firstNameInput.messages.map((message) => (
+            {form.firstName.messages.map((message) => (
                 <p className="error" key={message}>{message}</p>
             ))}
 
@@ -56,19 +48,19 @@ function Form({
                 Last Name
                 <input
                     type="text"
-                    value={lastNameInput.value}
-                    onChange={(event) => lastNameInput.setValue(event.target.value)}
+                    value={form.lastName.value}
+                    onChange={(event) => form.lastName.setValue(event.target.value)}
                 />
             </label>
-            {lastNameInput.messages.map((message) => (
+            {form.lastName.messages.map((message) => (
                 <p className="error" key={message}>{message}</p>
             ))}
 
             <label>
                 Department
                 <select
-                    value={departmentInput.value}
-                    onChange={(event) => departmentInput.setValue(event.target.value)}
+                    value={form.extra.value}
+                    onChange={(event) => form.extra.setValue(event.target.value)}
                 >
                     <option value="">-- Select Department --</option>
                     {departments.map((department) => (
@@ -78,7 +70,7 @@ function Form({
                     ))}
                 </select>
             </label>
-            {departmentInput.messages.map((message) => (
+            {form.extra.messages.map((message) => (
                 <p className="error" key={message}>{message}</p>
             ))}
 

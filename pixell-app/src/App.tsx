@@ -4,14 +4,20 @@ import Layout from "./components/layout/Layout";
 import Employees from "./components/employees/Employees";
 import Organization from "./components/organization/Organization";
 import employeeService from "./services/employeeService";
-import type { Department } from "./types";
+import roleService from "./services/roleService";
+import type { Department, Role } from "./types";
 
 function App() {
-    // ask for the list when the page loads
+    // both lists come from a request when the page loads
     const [departments, setDepartments] = useState<Department[]>(() => employeeService.getDepartments());
+    const [roles, setRoles] = useState<Role[]>(() => roleService.getRoles());
 
     const refreshEmployees = () => {
         setDepartments(employeeService.getDepartments());
+    };
+
+    const refreshRoles = () => {
+        setRoles(roleService.getRoles());
     };
 
     return (
@@ -27,7 +33,15 @@ function App() {
                         />
                     }
                 />
-                <Route path="organization" element={<Organization />} />
+                <Route
+                    path="organization"
+                    element={
+                        <Organization
+                            roles={roles}
+                            onRoleAdded={refreshRoles}
+                        />
+                    }
+                />
             </Route>
         </Routes>
     );

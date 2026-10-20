@@ -1,21 +1,26 @@
-import rolesJson from "../../data/roles.json";
 import type { Role } from "../../types";
+import RoleForm from "./RoleForm";
 import "./Organization.css";
 
-const roles = rolesJson as Role[];
-
-function Organization() {
+function Organization({
+    roles,
+    onRoleAdded
+}: {
+    roles: Role[];
+    onRoleAdded: () => void;
+}) {
     return (
         <main>
             <h2>Organization</h2>
             <ul className="role-list">
                 {roles.map((person) => (
-                    <li key={person.firstName + person.lastName}>
+                    <li key={person.role}>
                         <span>{person.firstName + " " + person.lastName}</span>
                         <span>{person.role}</span>
                     </li>
                 ))}
             </ul>
+            <RoleForm onRoleAdded={onRoleAdded} />
         </main>
     );
 }
