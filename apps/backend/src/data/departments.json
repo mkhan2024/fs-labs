@@ -1,0 +1,36 @@
+[
+    {
+        "name": "Creative",
+        "employees": [
+            { "firstName": "Maria", "lastName": "Santos" },
+            { "firstName": "Joshua", "lastName": "Grant" }
+        ]
+    },
+    {
+        "name": "Marketing",
+        "employees": [
+            { "firstName": "Hannah", "lastName": "Welch" },
+            { "firstName": "Priya", "lastName": "Patel" }
+        ]
+    },
+    {
+        "name": "Human Resources",
+        "employees": [
+            { "firstName": "Peter", "lastName": "Moore" }
+        ]
+    },
+    {
+        "name": "Information Technology",
+        "employees": [
+            { "firstName": "Shane", "lastName": "Lee" },
+            { "firstName": "Marshall", "lastName": "Wilson" },
+            { "firstName": "Aisha", "lastName": "Khan" }
+        ]
+    },
+    {
+        "name": "Finance",
+        "employees": [
+            { "firstName": "Diane", "lastName": "Okonkwo" }
+        ]
+    }
+]
