@@ -1,0 +1,19 @@
+{
+  "name": "pixell-river",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "start:frontend": "npm run dev --workspace=@pixell/frontend",
+    "start:backend": "npm start --workspace=@pixell/backend",
+    "dev": "concurrently \"npm:start:frontend\" \"npm:start:backend\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "typescript": "~5.8.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7"
+  }
+}
