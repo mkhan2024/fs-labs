@@ -1,0 +1,17 @@
+main {
+    background-color: lightgray;
+    max-width: 75%;
+    margin: auto;
+    padding: 1em;
+}
+
+.role-list {
+    list-style: none;
+    padding: 0;
+}
+
+.role-list li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5em;
+}

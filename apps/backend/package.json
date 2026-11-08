@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "ts-node --esm src/server.ts",
-    "dev": "ts-node --esm src/server.ts",
+    "start": "tsx src/server.ts",
+    "dev": "tsx src/server.ts",
     "build": "tsc"
   },
   "dependencies": {
@@ -19,6 +19,7 @@
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.10.2",
     "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
     "typescript": "~5.8.3"
   }
 }

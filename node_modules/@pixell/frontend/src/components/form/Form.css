@@ -1,0 +1,22 @@
+.add-form {
+    max-width: 75%;
+    margin: 1em auto;
+    padding: 1em;
+    background-color: lightgray;
+}
+
+.add-form label {
+    display: block;
+    margin-bottom: 0.8em;
+}
+
+.add-form input,
+.add-form select {
+    display: block;
+    margin-top: 0.3em;
+    padding: 0.3em;
+}
+
+.error {
+    color: red;
+}
