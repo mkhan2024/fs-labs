@@ -2,19 +2,19 @@ import type { Request, Response } from "express";
 import roleService from "../services/roleService.js";
 
 const roleController = {
-  getRoles(_req: Request, res: Response) {
-    const roles = roleService.getRoles();
+  async getRoles(_req: Request, res: Response) {
+    const roles = await roleService.getRoles();
     res.json(roles);
   },
 
-  createRole(req: Request, res: Response) {
+  async createRole(req: Request, res: Response) {
     const { firstName, lastName, roleTitle } = req.body as {
       firstName?: string;
       lastName?: string;
       roleTitle?: string;
     };
 
-    const result = roleService.tryCreateRole(
+    const result = await roleService.tryCreateRole(
       firstName ?? "",
       lastName ?? "",
       roleTitle ?? ""

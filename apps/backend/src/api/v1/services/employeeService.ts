@@ -10,16 +10,16 @@ export interface CreateEmployeeResult {
 }
 
 const employeeService = {
-  getDepartments(): Department[] {
+  async getDepartments(): Promise<Department[]> {
     return employeeRepository.getDepartments();
   },
 
-  tryCreateEmployee(firstName: string, lastName: string, departmentName: string): CreateEmployeeResult {
+  async tryCreateEmployee(firstName: string, lastName: string, departmentName: string): Promise<CreateEmployeeResult> {
     const firstNameMessages: string[] = [];
     const departmentMessages: string[] = [];
     const cleanFirst = firstName.trim();
     const cleanLast = lastName.trim();
-    const departments = employeeRepository.getDepartments();
+    const departments = await employeeRepository.getDepartments();
 
     if (cleanFirst.length < 3) {
       firstNameMessages.push("First name must be at least 3 characters.");
@@ -39,11 +39,11 @@ const employeeService = {
       };
     }
 
-    const employee = employeeRepository.createEmployee(cleanFirst, cleanLast, departmentName);
+    const employee = await employeeRepository.createEmployee(cleanFirst, cleanLast, departmentName);
     return {
       ok: true,
       employee,
-      departments: employeeRepository.getDepartments(),
+      departments: await employeeRepository.getDepartments(),
       firstNameMessages,
       departmentMessages
     };

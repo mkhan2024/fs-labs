@@ -10,17 +10,17 @@ export interface CreateRoleResult {
 }
 
 const roleService = {
-  getRoles(): Role[] {
+  async getRoles(): Promise<Role[]> {
     return roleRepository.getRoles();
   },
 
-  tryCreateRole(firstName: string, lastName: string, roleTitle: string): CreateRoleResult {
+  async tryCreateRole(firstName: string, lastName: string, roleTitle: string): Promise<CreateRoleResult> {
     const firstNameMessages: string[] = [];
     const extraMessages: string[] = [];
     const cleanFirst = firstName.trim();
     const cleanLast = lastName.trim();
     const cleanRole = roleTitle.trim();
-    const roles = roleRepository.getRoles();
+    const roles = await roleRepository.getRoles();
 
     if (cleanFirst.length < 3) {
       firstNameMessages.push("First name must be at least 3 characters.");
@@ -40,11 +40,11 @@ const roleService = {
       };
     }
 
-    const role = roleRepository.createRole(cleanFirst, cleanLast, cleanRole);
+    const role = await roleRepository.createRole(cleanFirst, cleanLast, cleanRole);
     return {
       ok: true,
       role,
-      roles: roleRepository.getRoles(),
+      roles: await roleRepository.getRoles(),
       firstNameMessages,
       extraMessages
     };

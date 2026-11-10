@@ -1,36 +1,44 @@
-import departmentsJson from "../../../data/departments.json" with { type: "json" };
+import prisma from "../../../lib/prisma.js";
 import type { Department, Employee } from "../../../../../shared/types/index.js";
 
-let departments: Department[] = (departmentsJson as Department[]).map((department) => ({
-  name: department.name,
-  employees: department.employees.map((employee) => ({ ...employee }))
-}));
-
 const employeeRepository = {
-  getDepartments(): Department[] {
+  async getDepartments(): Promise<Department[]> {
+    const departments = await prisma.department.findMany({
+      include: {
+        employees: true
+      }
+    });
+
     return departments.map((department) => ({
       name: department.name,
-      employees: department.employees.map((employee) => ({ ...employee }))
+      employees: department.employees.map((employee) => ({
+        firstName: employee.firstName,
+        lastName: employee.lastName ?? undefined
+      }))
     }));
   },
 
-  createEmployee(firstName: string, lastName: string, departmentName: string): Employee {
-    const employee: Employee = { firstName };
-    if (lastName !== "") {
-      employee.lastName = lastName;
-    }
-
-    departments = departments.map((department) => {
-      if (department.name !== departmentName) {
-        return department;
-      }
-      return {
-        ...department,
-        employees: [...department.employees, employee]
-      };
+  async createEmployee(firstName: string, lastName: string, departmentName: string): Promise<Employee> {
+    const department = await prisma.department.findUnique({
+      where: { name: departmentName }
     });
 
-    return employee;
+    if (!department) {
+      throw new Error("Department not found");
+    }
+
+    const employee = await prisma.employee.create({
+      data: {
+        firstName,
+        lastName: lastName || null,
+        departmentId: department.id
+      }
+    });
+
+    return {
+      firstName: employee.firstName,
+      lastName: employee.lastName ?? undefined
+    };
   }
 };
 

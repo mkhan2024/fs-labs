@@ -2,19 +2,19 @@ import type { Request, Response } from "express";
 import employeeService from "../services/employeeService.js";
 
 const employeeController = {
-  getDepartments(_req: Request, res: Response) {
-    const departments = employeeService.getDepartments();
+  async getDepartments(_req: Request, res: Response) {
+    const departments = await employeeService.getDepartments();
     res.json(departments);
   },
 
-  createEmployee(req: Request, res: Response) {
+  async createEmployee(req: Request, res: Response) {
     const { firstName, lastName, departmentName } = req.body as {
       firstName?: string;
       lastName?: string;
       departmentName?: string;
     };
 
-    const result = employeeService.tryCreateEmployee(
+    const result = await employeeService.tryCreateEmployee(
       firstName ?? "",
       lastName ?? "",
       departmentName ?? ""

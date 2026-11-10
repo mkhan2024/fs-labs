@@ -1,21 +1,31 @@
-import rolesJson from "../../../data/roles.json" with { type: "json" };
+import prisma from "../../../lib/prisma.js";
 import type { Role } from "../../../../../shared/types/index.js";
 
-let roles: Role[] = (rolesJson as Role[]).map((role) => ({ ...role }));
-
 const roleRepository = {
-  getRoles(): Role[] {
-    return roles.map((role) => ({ ...role }));
+  async getRoles(): Promise<Role[]> {
+    const roles = await prisma.role.findMany();
+
+    return roles.map((role) => ({
+      firstName: role.firstName,
+      lastName: role.lastName,
+      role: role.role
+    }));
   },
 
-  createRole(firstName: string, lastName: string, roleTitle: string): Role {
-    const role: Role = {
-      firstName,
-      lastName,
-      role: roleTitle
+  async createRole(firstName: string, lastName: string, roleTitle: string): Promise<Role> {
+    const role = await prisma.role.create({
+      data: {
+        firstName,
+        lastName,
+        role: roleTitle
+      }
+    });
+
+    return {
+      firstName: role.firstName,
+      lastName: role.lastName,
+      role: role.role
     };
-    roles = [...roles, role];
-    return role;
   }
 };
 
