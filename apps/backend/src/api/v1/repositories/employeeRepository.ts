@@ -1,12 +1,10 @@
 import prisma from "../../../lib/prisma.js";
-import type { Department, Employee } from "../../../../../shared/types/index.js";
+import type { Department, Employee } from "../../../types.js";
 
 const employeeRepository = {
   async getDepartments(): Promise<Department[]> {
     const departments = await prisma.department.findMany({
-      include: {
-        employees: true
-      }
+      include: { employees: true }
     });
 
     return departments.map((department) => ({

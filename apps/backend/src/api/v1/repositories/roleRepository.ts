@@ -1,5 +1,5 @@
 import prisma from "../../../lib/prisma.js";
-import type { Role } from "../../../../../shared/types/index.js";
+import type { Role } from "../../../types.js";
 
 const roleRepository = {
   async getRoles(): Promise<Role[]> {
@@ -14,11 +14,7 @@ const roleRepository = {
 
   async createRole(firstName: string, lastName: string, roleTitle: string): Promise<Role> {
     const role = await prisma.role.create({
-      data: {
-        firstName,
-        lastName,
-        role: roleTitle
-      }
+      data: { firstName, lastName, role: roleTitle }
     });
 
     return {

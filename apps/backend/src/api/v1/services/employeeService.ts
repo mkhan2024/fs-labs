@@ -1,5 +1,5 @@
 import employeeRepository from "../repositories/employeeRepository.js";
-import type { Department, Employee } from "../../../../../shared/types/index.js";
+import type { Department, Employee } from "../../../types.js";
 
 export interface CreateEmployeeResult {
   ok: boolean;

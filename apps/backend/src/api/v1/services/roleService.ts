@@ -1,5 +1,5 @@
 import roleRepository from "../repositories/roleRepository.js";
-import type { Role } from "../../../../../shared/types/index.js";
+import type { Role } from "../../../types.js";
 
 export interface CreateRoleResult {
   ok: boolean;
