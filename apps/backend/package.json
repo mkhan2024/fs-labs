@@ -7,7 +7,8 @@
     "start": "tsx src/server.ts",
     "dev": "tsx src/server.ts",
     "build": "tsc",
-    "postinstall": "prisma skills sync || exit 0"
+    "vercel-build": "prisma migrate deploy && prisma db seed && npm run build",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
@@ -24,8 +25,7 @@
     "ts-node": "^10.9.2",
     "tsx": "^4.19.2",
     "typescript": "~5.8.3"
-  }
-,
+  },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   }
